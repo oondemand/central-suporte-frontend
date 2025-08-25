@@ -2,9 +2,6 @@ import { apiAssistant } from "../config/api";
 
 const listAssistant = async () => {
   const response = await apiAssistant.get("/assistentes/ativos");
-
-  console.log(response);
-
   return response.data;
 };
 
