@@ -1,7 +1,7 @@
 {
-  "name": "central-oondemand-frontend",
+  "name": "central-suporte-frontend",
   "private": true,
-  "version": "0.3.9",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "release": "release-it",
