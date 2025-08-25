@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.1 (2025-08-25)
+
+### 🐛 Bug Fixes
+
+* update deploy workflow to trigger on push instead of pull request ([710dfb2](https://github.com/oondemand/central-suporte-frontend/commit/710dfb213ae4e2d2cfcc7cd175e2d17a0933ff04))
+
 ## 0.0.0 (2025-08-25)
 
 ## 0.3.8 (2025-08-22)
