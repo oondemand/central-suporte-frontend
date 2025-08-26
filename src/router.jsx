@@ -40,6 +40,7 @@ import { DocumentosFiscais } from "./pages/documentosFiscais/list";
 import { ImportDocumentosFiscaisPage } from "./pages/documentosFiscais/importacao";
 import RoteiroDeTestes from "./pages/roteiroDeTestes";
 import { IntegracoesConfigPage } from "./pages/integracao/configuracao";
+import { Severidades } from "./pages/severidades";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,8 @@ export const router = createBrowserRouter([
       { path: "/pessoas", element: <PessoasList /> },
       { path: "/pessoas/importacao", element: <ImportPessoasPage /> },
       { path: "/servicos", element: <ServicosList /> },
+      { path: "/severidades", element: <Severidades /> },
+
       { path: "/servicos/importacao", element: <ImportServicosPage /> },
       { path: "/documentos-fiscais", element: <DocumentosFiscais /> },
       {
