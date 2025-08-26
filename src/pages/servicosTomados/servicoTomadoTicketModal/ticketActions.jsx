@@ -1,17 +1,17 @@
 import { Flex, Button, useDialogContext, Text } from "@chakra-ui/react";
 import { Check, Trash, X } from "lucide-react";
 
-import { toaster } from "../ui/toaster";
-import { ServicoTomadoTicketService } from "../../service/servicoTomadoTicket";
+import { toaster } from "../../../components/ui/toaster";
+import { ServicoTomadoTicketService } from "../../../service/servicoTomadoTicket";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useConfirmation } from "../../hooks/useConfirmation";
-import { queryClient } from "../../config/react-query";
-import { ORIGENS } from "../../constants/origens";
-import { EtapaService } from "../../service/etapa";
-import { useListEtapas } from "../../hooks/api/etapas/useListEtapas";
-import { Tooltip } from "../../components/ui/tooltip";
+import { useConfirmation } from "../../../hooks/useConfirmation";
+import { queryClient } from "../../../config/react-query";
+import { ORIGENS } from "../../../constants/origens";
+// import { EtapaService } from "../../../service/etapa";
+import { useListEtapas } from "../../../hooks/api/etapas/useListEtapas";
+// import { Tooltip } from "../../../components/ui/tooltip";
 import { Link } from "react-router-dom";
-import { InvertedChart } from "../../components/svg/invertedChart";
+import { InvertedChart } from "../../../components/svg/invertedChart";
 
 export const TicketActions = ({ ticket, etapa }) => {
   const { setOpen } = useDialogContext();

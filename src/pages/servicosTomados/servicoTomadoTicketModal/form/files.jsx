@@ -3,11 +3,14 @@ import { Box, Text, Flex, Grid, GridItem, Button } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import { toaster } from "../../ui/toaster";
+import { toaster } from "../../../../components/ui/toaster";
 import { CircleX, Download, Paperclip } from "lucide-react";
-import { FileUploadRoot, FileUploadTrigger } from "../../ui/file-upload";
-import { ServicoTomadoTicketService } from "../../../service/servicoTomadoTicket";
-import { useConfirmation } from "../../../hooks/useConfirmation";
+import {
+  FileUploadRoot,
+  FileUploadTrigger,
+} from "../../../../components/ui/file-upload";
+import { ServicoTomadoTicketService } from "../../../../service/servicoTomadoTicket";
+import { useConfirmation } from "../../../../hooks/useConfirmation";
 import { saveAs } from "file-saver";
 
 export const FilesForm = ({ onlyReading, defaultValues, ticketId }) => {

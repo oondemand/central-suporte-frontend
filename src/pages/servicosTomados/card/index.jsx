@@ -9,7 +9,7 @@ import { ServicesCard } from "./servicesCard";
 import { AnexosCard } from "./arquivosCard";
 import { currency } from "../../../utils/currency";
 
-import { TicketModal } from "../../../components/servicoTomadoTicketModal";
+import { TicketModal } from "../servicoTomadoTicketModal";
 import { format } from "date-fns";
 import { useListEtapas } from "../../../hooks/api/etapas/useListEtapas";
 import { formatDateToDDMMYYYY } from "../../../utils/formatting";
