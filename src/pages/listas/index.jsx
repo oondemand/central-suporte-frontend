@@ -121,7 +121,7 @@ export function Listas() {
   };
 
   return (
-    <Flex flex="1" flexDir="column" py="8" px="6" bg="#F8F9FA">
+    <Flex flex="1" flexDir="column">
       <Text fontSize="lg" color="gray.700" fontWeight="semibold">
         Listas
       </Text>

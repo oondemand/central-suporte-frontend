@@ -43,16 +43,7 @@ export const Severidades = () => {
 
   return (
     <>
-      <Flex
-        flex="1"
-        pt="8"
-        px="6"
-        pb="2"
-        itens="center"
-        overflow="auto"
-        scrollbarWidth="thin"
-        bg="#F8F9FA"
-      >
+      <Flex>
         <Box>
           <Text fontSize="lg" color="gray.700" fontWeight="semibold">
             Severidades

@@ -87,7 +87,7 @@ export const Dashboard = () => {
   };
 
   return (
-    <Flex flex="1" flexDir="column" py="8" px="6" bg="#F8F9FA">
+    <Flex flex="1" flexDir="column">
       <Text color="gray.400" fontSize="xs">
         Visão geral
       </Text>

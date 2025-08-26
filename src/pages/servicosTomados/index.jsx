@@ -57,7 +57,7 @@ export const ServicosTomados = () => {
       : data?.tickets;
 
   return (
-    <Flex flex="1" flexDir="column" py="8" px="6" bg="#F8F9FA">
+    <Flex flex="1" flexDir="column">
       <Flex pb="4" justifyContent="space-between">
         <Flex alignItems="center" gap="2">
           <Heading color="gray.700" fontSize="2xl">
