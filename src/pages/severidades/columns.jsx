@@ -10,6 +10,7 @@ import { SelectPrestadorCell } from "../../components/dataGrid/cells/selectPrest
 import { SelectAutoCompleteCell } from "../../components/dataGrid/cells/selectAutoComplete";
 import { SelectMoedaCell } from "../../components/dataGrid/cells/selectMoeda";
 import { DefaultCell } from "../../components/dataGrid/cells/default";
+import { SwitchCell } from "../../components/dataGrid/cells/switchCelll";
 
 export const makeDynamicColumns = () => {
   const statusOptions = [
@@ -89,9 +90,8 @@ export const makeDynamicColumns = () => {
     {
       accessorKey: "apenas_dia_util",
       header: "Apenas dias úteis",
-      cell: DefaultCell,
-      enableColumnFilter: true,
-      meta: { filterKey: "apenas_dia_util" },
+      cell: SwitchCell,
+      enableColumnFilter: false,
     },
   ];
 };
