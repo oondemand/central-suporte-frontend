@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useDataGrid } from "../../hooks/useDataGrid";
 import { useUpdateSeveridade } from "../../hooks/api/severidade/useUpdateSeveridade";
 import { ORIGENS } from "../../constants/origens";
+import { SeveridadesDialog } from "./dialog";
 
 export const Severidades = () => {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ export const Severidades = () => {
           </Text>
           <Box mt="4" bg="white" py="6" px="4" rounded="lg" shadow="xs">
             <DataGrid
-              // form={SeveridadesDialog}
+              form={SeveridadesDialog}
               exportDataFn={getAllSeveridadesWithFilters}
               importDataFn={() => navigate("/severidades/importacao")}
               table={table}

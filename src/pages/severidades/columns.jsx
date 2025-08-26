@@ -3,13 +3,13 @@ import { SelectListaCell } from "../../components/dataGrid/cells/selectLista";
 import { TableActionsCell } from "../../components/dataGrid/cells/tableActionsCell";
 import { CurrencyCell } from "../../components/dataGrid/cells/currencyCell";
 import { DateCell } from "../../components/dataGrid/cells/dateCell";
-import { ServicosDialog } from "./dialog";
-import { DeleteServicoAction } from "../../components/dataGrid/actions/deleteServicoButton";
+import { DeleteSeveridadeAction } from "../../components/dataGrid/actions/deleteSeveridadeButton";
 import { formatDateToDDMMYYYY } from "../../utils/formatting";
 import { SelectPrestadorCell } from "../../components/dataGrid/cells/selectPrestador";
 import { SelectAutoCompleteCell } from "../../components/dataGrid/cells/selectAutoComplete";
 import { SelectMoedaCell } from "../../components/dataGrid/cells/selectMoeda";
 import { SwitchCell } from "../../components/dataGrid/cells/switchCelll";
+import { SeveridadesDialog } from "./dialog";
 
 export const makeDynamicColumns = () => {
   const statusOptions = [
@@ -26,31 +26,19 @@ export const makeDynamicColumns = () => {
   // ];
 
   return [
-    // {
-    //   accessorKey: "acoes",
-    //   header: "Ações",
-    //   cell: (props) => (
-    //     <TableActionsCell>
-    //       <DeleteServicoAction id={props.row.original?._id} />
-    //       <ServicosDialog
-    //         label="Serviço"
-    //         defaultValues={{
-    //           ...props.row.original,
-    //           dataContratacao: formatDateToDDMMYYYY(
-    //             props.row.original?.dataContratacao
-    //           ),
-    //           dataConclusao: formatDateToDDMMYYYY(
-    //             props.row.original?.dataConclusao
-    //           ),
-    //           pessoa: {
-    //             label: `${props.row.original?.pessoa?.nome}-${props.row.original?.pessoa?.documento}`,
-    //             value: props.row.original?.pessoa?._id,
-    //           },
-    //         }}
-    //       />
-    //     </TableActionsCell>
-    //   ),
-    // },
+    {
+      accessorKey: "acoes",
+      header: "Ações",
+      cell: (props) => (
+        <TableActionsCell>
+          <DeleteSeveridadeAction id={props.row.original?._id} />
+          <SeveridadesDialog
+            label="Severidade"
+            defaultValues={props.row.original}
+          />
+        </TableActionsCell>
+      ),
+    },
     {
       accessorKey: "titulo",
       header: "Titulo",

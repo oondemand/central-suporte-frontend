@@ -10,12 +10,12 @@ const listarSeveridades = async ({ filters }) => {
 //   return data;
 // };
 
-// const criarSeveridade = async ({ body, origem }) => {
-//   const { data } = await api.post("/severidades", body, {
-//     headers: { "x-origem": origem },
-//   });
-//   return data;
-// };
+const criarSeveridade = async ({ body, origem }) => {
+  const { data } = await api.post("/severidades", body, {
+    headers: { "x-origem": origem },
+  });
+  return data;
+};
 
 const atualizarSeveridade = async ({ id, body, origem }) => {
   const { data } = await api.patch(`severidades/${id}`, body, {
@@ -24,12 +24,12 @@ const atualizarSeveridade = async ({ id, body, origem }) => {
   return data;
 };
 
-// const deletarSeveridade = async ({ id, origem }) => {
-//   const { data } = await api.delete(`severidades/${id}`, {
-//     headers: { "x-origem": origem },
-//   });
-//   return data;
-// };
+const deletarSeveridade = async ({ id, origem }) => {
+  const { data } = await api.delete(`severidades/${id}`, {
+    headers: { "x-origem": origem },
+  });
+  return data;
+};
 
 const importarSeveridades = async ({ files }) => {
   const formData = new FormData();
@@ -53,10 +53,10 @@ const exportarSeveridades = async ({ filters }) => {
 
 export const SeveridadeService = {
   listarSeveridades,
-  // criarSeveridade,
+  criarSeveridade,
   atualizarSeveridade,
   importarSeveridades,
-  // deletarSeveridade,
+  deletarSeveridade,
   // listarSeveridadesPorPessoa,
   exportarSeveridades,
 };

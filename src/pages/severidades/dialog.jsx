@@ -2,8 +2,8 @@ import { Box } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
 import { queryClient } from "../../config/react-query";
 import { createDynamicFormFields } from "./formFields";
-import { useUpdateServico } from "../../hooks/api/servico/useUpdateServico";
-import { useCreateServico } from "../../hooks/api/servico/useCreateServico";
+import { useUpdateSeveridade } from "../../hooks/api/severidade/useUpdateSeveridade";
+import { useCreateSeveridade } from "../../hooks/api/severidade/useCreateSeveridade";
 import { useLoadAssistant } from "../../hooks/api/assistant-config/useLoadAssistant";
 import { useIaChat } from "../../hooks/useIaChat";
 import { FormDialog } from "../../components/formDialog";
@@ -13,38 +13,35 @@ import {
 } from "../../components/formDialog/form-trigger";
 import { ORIGENS } from "../../constants/origens";
 
-export const ServicosDialog = ({
+export const SeveridadesDialog = ({
   defaultValues = null,
-  label = "Adicionar servico",
+  label = "Adicionar severidade",
 }) => {
   const [data, setData] = useState(defaultValues);
   const [open, setOpen] = useState(false);
   const { onOpen } = useIaChat();
-  const { assistant } = useLoadAssistant(["servico"]);
+  const { assistant } = useLoadAssistant(["severidade"]);
   const fields = useMemo(() => createDynamicFormFields(), []);
 
-  const updateServico = useUpdateServico({
+  const updateSeveridade = useUpdateSeveridade({
     origem: ORIGENS.FORM,
     onSuccess: (data) => {
-      if (open) setData((prev) => (data?.servico ? data.servico : prev));
+      if (open) setData((prev) => (data?.severidade ? data.severidade : prev));
     },
   });
 
-  const createServico = useCreateServico({
+  const createSeveridade = useCreateSeveridade({
     origem: ORIGENS.FORM,
     onSuccess: (data) => {
-      if (open) setData((prev) => (data?.servico ? data.servico : prev));
+      if (open) setData((prev) => (data?.severidade ? data.severidade : prev));
     },
   });
 
   const onSubmit = async (values) => {
-    const body = {
-      ...values,
-      pessoa: values?.pessoa?.value,
-    };
+    const body = { ...values };
 
-    if (!data) return await createServico.mutateAsync({ body });
-    return await updateServico.mutateAsync({ body, id: data._id });
+    if (!data) return await createSeveridade.mutateAsync({ body });
+    return await updateSeveridade.mutateAsync({ body, id: data._id });
   };
 
   useEffect(() => {
@@ -63,12 +60,12 @@ export const ServicosDialog = ({
         onOpenAssistantDialog={() => onOpen(data, assistant)}
         onSubmit={onSubmit}
         onOpenChange={() => {
-          queryClient.invalidateQueries(["listar-servicos"]);
+          queryClient.invalidateQueries(["listar-severidades"]);
           setOpen(false);
           setData(defaultValues);
         }}
         open={open}
-        stateKey="servicos"
+        stateKey="severidades"
       />
     </Box>
   );

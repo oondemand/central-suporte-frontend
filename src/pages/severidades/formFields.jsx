@@ -10,64 +10,40 @@ import { SelectMoedaField } from "../../components/buildForm/filds/selectMoedaFi
 export const createDynamicFormFields = () => {
   return [
     {
-      label: "Detalhes do serviço",
       group: [
         {
-          accessorKey: "pessoa",
-          label: "Cliente ou prestador",
-          render: SelectPrestadorField,
-          validation: z.object(
-            { label: z.string(), value: z.string() },
-            { message: "Prestador é obrigatório" }
-          ),
-          colSpan: 2,
-        },
-        {
-          accessorKey: "tipoServicoTomado",
-          label: "Tipo de servico tomado",
-          render: SelectListaField,
-          cod: "tipo-servico-tomado",
-          validation: z.string().optional(),
-          colSpan: 1,
-        },
-        {
-          accessorKey: "moeda",
-          label: "Moeda",
-          render: SelectMoedaField,
-          validation: z.string({ message: "Obrigatório" }),
-          colSpan: 1,
-        },
-        {
-          accessorKey: "valorMoeda",
-          label: "Valor (na moeda)",
-          render: CurrencyField,
-          validation: currencyValidation,
-          colSpan: 1,
-        },
-      ],
-    },
-    {
-      label: "Informações adicionais",
-      group: [
-        {
-          accessorKey: "descricao",
-          label: "Descrição",
+          accessorKey: "titulo",
+          label: "Titulo",
           render: DefaultField,
-          validation: z.string().optional(),
+          validation: z.string().nonempty("Campo obrigatório"),
           colSpan: 2,
         },
         {
-          accessorKey: "dataContratacao",
-          label: "Data contratação",
-          render: DateField,
-          validation: dateValidation,
+          accessorKey: "impacto",
+          label: "Impacto",
+          render: DefaultField,
+          validation: z.string().nonempty("Campo obrigatório"),
+          colSpan: 2,
+        },
+        {
+          accessorKey: "exemplo",
+          label: "Exemplo",
+          render: DefaultField,
+          validation: z.string().nonempty("Campo obrigatório"),
+          colSpan: 2,
+        },
+        {
+          accessorKey: "tempo_horas_resposta",
+          label: "Tempo resposta (horas)",
+          render: DefaultField,
+          validation: z.coerce.string().nonempty("Campo obrigatório"),
           colSpan: 1,
         },
         {
-          accessorKey: "dataConclusao",
-          label: "Data Conclusão",
-          render: DateField,
-          validation: dateValidation,
+          accessorKey: "tempo_resolucao_resposta",
+          label: "Tempo resolução (horas)",
+          render: DefaultField,
+          validation: z.coerce.string().nonempty("Campo obrigatório"),
           colSpan: 1,
         },
       ],
