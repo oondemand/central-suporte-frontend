@@ -61,7 +61,7 @@ export const ServicosTomados = () => {
       <Flex pb="4" justifyContent="space-between">
         <Flex alignItems="center" gap="2">
           <Heading color="gray.700" fontSize="2xl">
-            Central de Serviços Tomados{" "}
+            Esteira de suporte
           </Heading>
           {(isEtapasLoading || isTicketLoading || isTicketFetching) && (
             <Spinner size="md" />
