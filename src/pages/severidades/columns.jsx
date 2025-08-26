@@ -9,7 +9,6 @@ import { formatDateToDDMMYYYY } from "../../utils/formatting";
 import { SelectPrestadorCell } from "../../components/dataGrid/cells/selectPrestador";
 import { SelectAutoCompleteCell } from "../../components/dataGrid/cells/selectAutoComplete";
 import { SelectMoedaCell } from "../../components/dataGrid/cells/selectMoeda";
-import { DefaultCell } from "../../components/dataGrid/cells/default";
 import { SwitchCell } from "../../components/dataGrid/cells/switchCelll";
 
 export const makeDynamicColumns = () => {
@@ -18,13 +17,13 @@ export const makeDynamicColumns = () => {
     { value: "inativo", label: "Inativo" },
   ];
 
-  const statusProcessamentoOptions = [
-    { label: "Aberto", value: "aberto" },
-    { label: "Pendente", value: "pendente" },
-    { label: "Processando", value: "processando" },
-    { label: "Pago", value: "pago" },
-    { label: "Pago externo", value: "pago-externo" },
-  ];
+  // const statusProcessamentoOptions = [
+  //   { label: "Aberto", value: "aberto" },
+  //   { label: "Pendente", value: "pendente" },
+  //   { label: "Processando", value: "processando" },
+  //   { label: "Pago", value: "pago" },
+  //   { label: "Pago externo", value: "pago-externo" },
+  // ];
 
   return [
     // {
@@ -55,35 +54,35 @@ export const makeDynamicColumns = () => {
     {
       accessorKey: "titulo",
       header: "Titulo",
-      cell: DefaultCell,
+      cell: DefaultEditableCell,
       enableColumnFilter: true,
       meta: { filterKey: "titulo" },
     },
     {
       accessorKey: "impacto",
       header: "Impacto",
-      cell: DefaultCell,
+      cell: DefaultEditableCell,
       enableColumnFilter: true,
       meta: { filterKey: "impacto" },
     },
     {
       accessorKey: "exemplo",
       header: "Exemplo",
-      cell: DefaultCell,
+      cell: DefaultEditableCell,
       enableColumnFilter: true,
       meta: { filterKey: "exemplo" },
     },
     {
       accessorKey: "tempo_horas_resposta",
       header: "Tempo resposta (horas)",
-      cell: DefaultCell,
+      cell: DefaultEditableCell,
       enableColumnFilter: true,
       meta: { filterKey: "tempo_horas_resposta" },
     },
     {
       accessorKey: "tempo_resolucao_resposta",
       header: "Tempo resolução (horas)",
-      cell: DefaultCell,
+      cell: DefaultEditableCell,
       enableColumnFilter: true,
       meta: { filterKey: "tempo_resolucao_resposta" },
     },

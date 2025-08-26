@@ -6,7 +6,7 @@ import {
 } from "../../../components/ui/file-upload";
 
 import { useMutation, useQuery, keepPreviousData } from "@tanstack/react-query";
-import { ServicoService } from "../../../service/servico";
+import { SeveridadeService } from "../../../service/severidade";
 import { queryClient } from "../../../config/react-query";
 import { toaster } from "../../../components/ui/toaster";
 import { Download, Upload } from "lucide-react";
@@ -15,15 +15,15 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
 
-export const ImportServicosPage = () => {
+export const ImportSeveridadesPage = () => {
   const [open, setOpen] = useState([0]);
 
-  const { mutateAsync: importServicosMutation, isPending } = useMutation({
+  const { mutateAsync: importSeveridadesMutation, isPending } = useMutation({
     mutationFn: async ({ files }) =>
-      await ServicoService.importarServicos({ files }),
+      await SeveridadeService.importarSeveridades({ files }),
     onSuccess() {
-      queryClient.refetchQueries(["listar-servicos"]);
-      queryClient.invalidateQueries(["list-servicos-importados"]);
+      queryClient.refetchQueries(["listar-severidades"]);
+      queryClient.invalidateQueries(["list-severidades-importados"]);
       toaster.create({
         title: "Arquivo enviado com sucesso",
         description: "Aguardando processamento.",
@@ -39,9 +39,9 @@ export const ImportServicosPage = () => {
   });
 
   const { data } = useQuery({
-    queryKey: ["list-servicos-importados"],
+    queryKey: ["list-severidades-importados"],
     queryFn: async () => {
-      const { data } = await api.get("/importacoes?tipo=servico&pageSize=5");
+      const { data } = await api.get("/importacoes?tipo=severidade&pageSize=5");
       return data;
     },
     placeholderData: keepPreviousData,
@@ -83,7 +83,7 @@ export const ImportServicosPage = () => {
       >
         <Box>
           <Text fontSize="lg" fontWeight="semibold">
-            Importar Servicos
+            Importar Severidades
           </Text>
           <Text fontSize="sm" color="gray.500">
             Selecione a planilha que deseja importar
@@ -93,7 +93,7 @@ export const ImportServicosPage = () => {
           <FileUploadRoot
             accept=".xlsx, .xls, .xlsm, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
             onFileAccept={async (e) => {
-              await importServicosMutation({ files: e.files });
+              await importSeveridadesMutation({ files: e.files });
             }}
             maxFiles={1}
           >
@@ -161,11 +161,11 @@ export const ImportServicosPage = () => {
 
                             <Box>
                               <Text fontSize="sm" color="gray.600">
-                                Total de novos servicos
+                                Total de novos severidades
                               </Text>
                               <Text fontSize="2xl" fontWeight="bold">
                                 {data
-                                  ? importacao.detalhes?.novosServicos
+                                  ? importacao.detalhes?.novosSeveridades
                                   : "..."}
                               </Text>
                             </Box>

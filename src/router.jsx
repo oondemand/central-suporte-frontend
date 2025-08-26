@@ -41,6 +41,7 @@ import { ImportDocumentosFiscaisPage } from "./pages/documentosFiscais/importaca
 import RoteiroDeTestes from "./pages/roteiroDeTestes";
 import { IntegracoesConfigPage } from "./pages/integracao/configuracao";
 import { Severidades } from "./pages/severidades";
+import { ImportSeveridadesPage } from "./pages/severidades/importacao";
 
 export const router = createBrowserRouter([
   {
@@ -57,6 +58,7 @@ export const router = createBrowserRouter([
       { path: "/pessoas/importacao", element: <ImportPessoasPage /> },
       { path: "/servicos", element: <ServicosList /> },
       { path: "/severidades", element: <Severidades /> },
+      { path: "/severidades/importacao", element: <ImportSeveridadesPage /> },
 
       { path: "/servicos/importacao", element: <ImportServicosPage /> },
       { path: "/documentos-fiscais", element: <DocumentosFiscais /> },
