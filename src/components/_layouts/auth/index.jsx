@@ -36,7 +36,9 @@ export const AuthLayout = () => {
     const token = searchParams.get("code");
     if (token) {
       localStorage.setItem("token", token);
-      navigate(location.pathname, { replace: true });
+      const params = new URLSearchParams(searchParams);
+      params.delete("code");
+      navigate(`${location.pathname}?${params.toString()}`, { replace: true });
     }
   }, [searchParams]);
 
@@ -52,18 +54,20 @@ export const AuthLayout = () => {
   };
 
   if (!user && isLoading === false) {
-    window.location.href = `${env.VITE_MEUS_APPS_URL}/login`;
+    // window.location.href = `${env.VITE_MEUS_APPS_URL}/login`;
     return;
   }
+
+  console.log("USER", user);
 
   return (
     <Flex direction="row" minHeight="100vh" minW="100vw">
       <Flex
         pt="4"
         flexDir="column"
-        maxW="170px"
-        minW="170px"
-        w="170px"
+        maxW="165px"
+        minW="165px"
+        w="165px"
         borderRight="1px solid"
         borderColor="gray.100"
         gap="2"
@@ -85,12 +89,14 @@ export const AuthLayout = () => {
             <Box w="120px">
               {/* <img src="/logo_rakuten_purple.png" alt="RAKUTEN" /> */}
               <Text fontSize="lg" fontWeight="700">
-                oondemand
+                Assistentes
               </Text>
             </Box>
           </Link>
         </Flex>
         {menuItems.map((item, index) => {
+          if (item?.rules?.includes(user?.tipo)) return;
+
           if (item?.subLinks)
             return (
               <AccordionRoot collapsible key={`${item.title}-${index}`}>
@@ -102,6 +108,12 @@ export const AuthLayout = () => {
                     border="none"
                   >
                     <Flex rounded="40%" gap="3" bg="white" alignItems="center">
+                      <Icon
+                        as={item?.icon}
+                        w="18px"
+                        h="18px"
+                        color="brand.500"
+                      />
                       <Text
                         fontSize="12px"
                         color="gray.500"
@@ -112,16 +124,19 @@ export const AuthLayout = () => {
                     </Flex>
                   </AccordionItemTrigger>
                   <AccordionItemContent w="full">
-                    {item?.subLinks.map((item, i) => (
-                      <Box w="full" pb="2" key={`${item.title}-${index}`}>
-                        <NavLink
-                          to={item?.href ?? "#"}
-                          icon={item.icon}
-                          title={item.title}
-                          i={index}
-                        />
-                      </Box>
-                    ))}
+                    {item?.subLinks.map((item, i) => {
+                      if (item?.rules?.includes(user?.tipo)) return;
+                      return (
+                        <Box w="full" pb="2" key={`${item.title}-${index}`}>
+                          <NavLink
+                            to={item?.href ?? "#"}
+                            icon={item.icon}
+                            title={item.title}
+                            i={index}
+                          />
+                        </Box>
+                      );
+                    })}
                   </AccordionItemContent>
                 </AccordionItem>
               </AccordionRoot>
@@ -161,7 +176,9 @@ export const AuthLayout = () => {
         paddingBottom="0"
         overflow="hidden"
       >
-        {!isLoading ? <Outlet /> : <Spinner m="8" />}
+        <Flex flex="1" flexDir="column" py="8" px="6" bg="#F8F9FA">
+          {!isLoading ? <Outlet /> : <Spinner />}
+        </Flex>
       </Flex>
     </Flex>
   );
