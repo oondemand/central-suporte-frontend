@@ -5,9 +5,7 @@ export const useListEtapas = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["listar-etapas"],
     queryFn: () =>
-      EtapaService.listarEtapasAtivasPorEsteira({
-        esteira: "servicos-tomados",
-      }),
+      EtapaService.listarEtapasAtivasPorEsteira({ esteira: "suporte" }),
     staleTime: 1000 * 60 * 10,
   });
 
