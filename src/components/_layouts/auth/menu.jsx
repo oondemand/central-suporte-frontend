@@ -83,10 +83,12 @@ export const menuItems = [
     title: "Severidades",
     icon: ListChecks,
     href: "/severidades",
+    rules: ["padrao"],
   },
   {
     title: "Configurações",
     icon: Settings,
+    rules: ["padrao"],
     subLinks: [
       {
         title: "Listas",
