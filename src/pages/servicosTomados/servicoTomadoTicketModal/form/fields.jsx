@@ -3,6 +3,8 @@ import { DefaultField } from "../../../../components/buildForm/filds/default";
 import { SelectField } from "../../../../components/buildForm/filds/selectField";
 import { TextareaField } from "../../../../components/buildForm/filds/textarea";
 import { SelectListaField } from "../../../../components/buildForm/filds/selectListaField";
+import { SelectAplicativoField } from "../../../../components/buildForm/filds/selectAplicativoField";
+import { SelectSeveridadeField } from "../../../../components/buildForm/filds/selectSeveridade";
 
 export const fields = () => {
   return [
@@ -12,6 +14,20 @@ export const fields = () => {
       render: DefaultField,
       validation: z.string(),
       colSpan: 2,
+    },
+    {
+      accessorKey: "aplicativo",
+      label: "Aplicativo",
+      render: SelectAplicativoField,
+      validation: z.any(),
+      colSpan: 1,
+    },
+    {
+      accessorKey: "severidade",
+      label: "Severidade",
+      render: SelectSeveridadeField,
+      validation: z.any(),
+      colSpan: 1,
     },
     {
       accessorKey: "prioridade",

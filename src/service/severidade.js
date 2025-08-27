@@ -5,10 +5,10 @@ const listarSeveridades = async ({ filters }) => {
   return data;
 };
 
-// const listarSeveridadesPorPessoa = async ({ pessoaId }) => {
-//   const { data } = await api.get(`/severidades/pessoa/${pessoaId}`);
-//   return data;
-// };
+const listarTodas = async () => {
+  const { data } = await api.get(`/severidades/todas`);
+  return data;
+};
 
 const criarSeveridade = async ({ body, origem }) => {
   const { data } = await api.post("/severidades", body, {
@@ -57,6 +57,6 @@ export const SeveridadeService = {
   atualizarSeveridade,
   importarSeveridades,
   deletarSeveridade,
-  // listarSeveridadesPorPessoa,
+  listarTodas,
   exportarSeveridades,
 };
