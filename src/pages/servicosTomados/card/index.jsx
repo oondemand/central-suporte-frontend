@@ -1,48 +1,20 @@
-import { Box, Text, Flex, Badge } from "@chakra-ui/react";
-import React, { memo, useState } from "react";
-
+import { Box, Text, Flex } from "@chakra-ui/react";
+import { memo, useState } from "react";
 import { ptBR } from "date-fns/locale";
-import { LucideListCheck, Paperclip, File } from "lucide-react";
+import { Paperclip } from "lucide-react";
 import { Tooltip } from "../../../components/ui/tooltip";
-
-import { ServicesCard } from "./servicesCard";
 import { AnexosCard } from "./arquivosCard";
-import { currency } from "../../../utils/currency";
-
 import { TicketModal } from "../servicoTomadoTicketModal";
 import { format } from "date-fns";
-import { useListEtapas } from "../../../hooks/api/etapas/useListEtapas";
-import { formatDateToDDMMYYYY } from "../../../utils/formatting";
-import { DocumentosFiscaisCard } from "./documentosFiscaisCard";
-
-const BADGE_MAP = {
-  pago: { color: "green", title: "Pago em" },
-  atrasado: { color: "red", title: "Venc." },
-  "a vencer": { color: "yellow", title: "Venc." },
-};
 
 const _TicketCard = ({ ticket }) => {
   const [open, setOpen] = useState(false);
 
-  const statusColorMap = {
-    "aguardando-inicio": "yellow.400",
-    trabalhando: "green.400",
-    revisao: "red.500",
+  const prioridadeColorMap = {
+    baixa: "gray.200",
+    media: "yellow.400",
+    alta: "red.500",
   };
-
-  const ticketTypeCarMap = {
-    pj: "NF",
-    ext: "INV",
-    pf: "RPA",
-  };
-
-  const valorTotal = ticket?.servicos?.reduce((acc, curr) => {
-    acc = acc + (curr?.valor ?? 0);
-    return acc;
-  }, 0);
-
-  const { etapas } = useListEtapas();
-  const ultimaEtapa = etapas?.[etapas?.length - 1]?.codigo;
 
   return (
     <Box>
@@ -66,11 +38,11 @@ const _TicketCard = ({ ticket }) => {
                 rounded="full"
                 minH="12px"
                 minW="12px"
-                bg={statusColorMap[ticket?.status] || "blue.500"}
+                bg={prioridadeColorMap[ticket?.prioridade] || "blue.500"}
               />
               <Tooltip
                 showArrow
-                content={ticket?.titulo}
+                content={ticket?.assunto}
                 positioning={{ placement: "top" }}
                 openDelay={700}
                 closeDelay={50}
@@ -82,7 +54,7 @@ const _TicketCard = ({ ticket }) => {
                     fontSize="xs"
                     color="gray.700"
                   >
-                    {ticket?.titulo}
+                    {ticket?.assunto}
                   </Text>
                   <Text
                     truncate
@@ -98,31 +70,6 @@ const _TicketCard = ({ ticket }) => {
               </Tooltip>
             </Flex>
 
-            {(ticket?.contaPagarOmie || ticket?.status === "concluido") && (
-              <Flex alignItems="center" justifyContent="space-between">
-                <Text color="gray.400" fontSize="2xs" fontWeight="medium">
-                  {BADGE_MAP[
-                    ticket?.contaPagarOmie?.status_titulo?.toLowerCase()
-                  ]?.title ?? "Concluido"}{" "}
-                  {formatDateToDDMMYYYY(
-                    ticket?.contaPagarOmie?.data_vencimento
-                  )}
-                </Text>
-                <Badge
-                  variant="surface"
-                  colorPalette={
-                    BADGE_MAP[
-                      ticket?.contaPagarOmie?.status_titulo?.toLowerCase()
-                    ]?.color ?? ""
-                  }
-                  size="xs"
-                >
-                  {ticket?.contaPagarOmie?.status_titulo?.toLowerCase() ??
-                    "Concluido"}
-                </Badge>
-              </Flex>
-            )}
-
             <Flex
               w="full"
               alignItems="center"
@@ -130,30 +77,6 @@ const _TicketCard = ({ ticket }) => {
               gap="2"
             >
               <Flex alignItems="center" gap="2">
-                <Badge>
-                  <Text fontSize="xs">
-                    {ticketTypeCarMap[ticket?.pessoa?.tipo]}
-                  </Text>
-                </Badge>
-                <Tooltip
-                  showArrow
-                  content={<ServicesCard servicos={ticket?.servicos} />}
-                  positioning={{ placement: "bottom" }}
-                  openDelay={500}
-                  closeDelay={50}
-                >
-                  <Flex color="gray.400" alignItems="center" gap="1px">
-                    <LucideListCheck size={14} />
-                    <Text
-                      h="15px"
-                      textAlign="center"
-                      fontWeight={400}
-                      fontSize="xs"
-                    >
-                      {ticket?.servicos?.length}
-                    </Text>
-                  </Flex>
-                </Tooltip>
                 <Tooltip
                   showArrow
                   content={<AnexosCard anexos={ticket?.arquivos} />}
@@ -173,39 +96,7 @@ const _TicketCard = ({ ticket }) => {
                     </Text>
                   </Flex>
                 </Tooltip>
-                <Tooltip
-                  showArrow
-                  content={
-                    <DocumentosFiscaisCard
-                      documentosFiscais={ticket?.documentosFiscais}
-                    />
-                  }
-                  positioning={{ placement: "bottom" }}
-                  openDelay={500}
-                  closeDelay={50}
-                >
-                  <Flex color="gray.400" alignItems="center" gap="1px">
-                    <File size={14} />
-                    <Text
-                      h="15px"
-                      textAlign="center"
-                      fontWeight={400}
-                      fontSize="xs"
-                    >
-                      {ticket?.documentosFiscais?.length ?? 0}
-                    </Text>
-                  </Flex>
-                </Tooltip>
               </Flex>
-              <Text
-                h="15px"
-                truncate
-                color="gray.400"
-                fontWeight={400}
-                fontSize="xs"
-              >
-                {currency.format(valorTotal)}
-              </Text>
             </Flex>
           </Flex>
         </Flex>
@@ -216,11 +107,11 @@ const _TicketCard = ({ ticket }) => {
           defaultValue={ticket}
           open={open}
           setOpen={setOpen}
-          onlyReading={[
-            "conta-pagar-central-omie",
-            "conta-pagar-omie-central",
-            "concluido",
-          ].includes(ticket?.etapa)}
+          // onlyReading={[
+          //   "conta-pagar-central-omie",
+          //   "conta-pagar-omie-central",
+          //   "concluido",
+          // ].includes(ticket?.etapa)}
         />
       )}
     </Box>

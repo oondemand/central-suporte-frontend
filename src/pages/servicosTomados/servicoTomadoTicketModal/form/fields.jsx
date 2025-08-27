@@ -1,37 +1,14 @@
 import { z } from "zod";
 import { DefaultField } from "../../../../components/buildForm/filds/default";
 import { SelectField } from "../../../../components/buildForm/filds/selectField";
+import { TextareaField } from "../../../../components/buildForm/filds/textarea";
+import { SelectListaField } from "../../../../components/buildForm/filds/selectListaField";
 
 export const fields = () => {
-  // aplicativo: { type: String, required: true },
-  // usuario_solicitante: { type: String, required: true },
-  // prioridade: {
-  //   type: String,
-  //   enum: ["baixa", "media", "alta"],
-  //   default: "baixa",
-  // },
-  // categoria: { type: String, required: true },
-  // assunto: { type: String, required: true },
-  // detalhamento: { type: String, required: true },
-  // etapa: { type: String, required: true },
-  // arquivos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Arquivo" }],
-  // severidade: { type: mongoose.Schema.Types.ObjectId, ref: "Severidade" },
-  // primeira_resposta_em: Date,
-  // ultima_interacao_em: Date,
-  // resolvido_em: Date,
-  // fechado_em: Date,
-
   return [
     {
       accessorKey: "assunto",
       label: "Assunto",
-      render: DefaultField,
-      validation: z.string(),
-      colSpan: 2,
-    },
-    {
-      accessorKey: "detalhamento",
-      label: "Detalhamento",
       render: DefaultField,
       validation: z.string(),
       colSpan: 2,
@@ -45,8 +22,31 @@ export const fields = () => {
         { label: "Média", value: "media" },
         { label: "Alta", value: "alta" },
       ],
-      validation: z.string(),
+      validation: z.string("Campo obrigatório"),
       colSpan: 1,
+    },
+    {
+      accessorKey: "categoria",
+      label: "Categoria",
+      render: SelectListaField,
+      cod: "categoria",
+      validation: z.string("Campo obrigatório"),
+      colSpan: 1,
+    },
+    {
+      accessorKey: "detalhamento",
+      label: "Detalhamento",
+      render: (props) => (
+        <TextareaField
+          h="36"
+          mt="1.5"
+          variant="outline"
+          fontWeight="medium"
+          {...props}
+        />
+      ),
+      validation: z.string(),
+      colSpan: 2,
     },
   ];
 };

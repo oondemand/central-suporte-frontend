@@ -15,9 +15,9 @@ import { Oondemand } from "../../../components/svg/oondemand";
 // import { PessoaForm } from "./form/pessoa";
 
 import { useMutation } from "@tanstack/react-query";
-// import { ServicoTomadoTicketService } from "../../../../service/servicoTomadoTicket";
+import { ServicoTomadoTicketService } from "../../../service/servicoTomadoTicket";
 
-// import { toaster } from "../../../components/ui/toaster";
+import { toaster } from "../../../components/ui/toaster";
 
 // import { TicketStatus } from "./ticketStatus";
 import { TicketActions } from "./ticketActions";
@@ -39,65 +39,59 @@ export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
   const [ticket, setTicket] = useState(defaultValue);
   const { onOpen } = useIaChat();
 
-  // const { mutateAsync: createTicketMutation } = useMutation({
-  //   mutationFn: async ({ body }) =>
-  //     await ServicoTomadoTicketService.adicionarTicket({
-  //       body,
-  //       origem: ORIGENS.ESTEIRA,
-  //     }),
-  //   onSuccess: (data) => {
-  //     toaster.create({
-  //       title: "Ticket criado com sucesso!",
-  //       type: "success",
-  //     });
+  const { mutateAsync: createTicketMutation } = useMutation({
+    mutationFn: async ({ body }) =>
+      await ServicoTomadoTicketService.adicionarTicket({
+        body,
+        origem: ORIGENS.ESTEIRA,
+      }),
+    onSuccess: (data) => {
+      toaster.create({
+        title: "Ticket criado com sucesso!",
+        type: "success",
+      });
 
-  //     setTicket(data?.ticket);
-  //   },
-  // });
+      setTicket(data?.ticket);
+    },
+  });
 
-  // const { mutateAsync: updateTicketMutation } = useMutation({
-  //   mutationFn: async ({ id, body }) =>
-  //     await ServicoTomadoTicketService.alterarTicket({
-  //       id,
-  //       body,
-  //       origem: ORIGENS.ESTEIRA,
-  //     }),
-  //   onSuccess: (data) => {
-  //     toaster.create({
-  //       title: "Ticket atualizado com sucesso!",
-  //       type: "success",
-  //     });
+  const { mutateAsync: updateTicketMutation } = useMutation({
+    mutationFn: async ({ id, body }) =>
+      await ServicoTomadoTicketService.alterarTicket({
+        id,
+        body,
+        origem: ORIGENS.ESTEIRA,
+      }),
+    onSuccess: (data) => {
+      toaster.create({
+        title: "Ticket atualizado com sucesso!",
+        type: "success",
+      });
 
-  //     setTicket(data?.ticket);
-  //   },
-  // });
+      setTicket(data?.ticket);
+    },
+  });
 
-  // const onInputTicketFieldBlur = async ({ target: { name, value } }) => {
-  //   if (value !== "" && !ticket) {
-  //     return await createTicketMutation({
-  //       body: {
-  //         [name]: value,
-  //       },
-  //     });
-  //   }
+  const onInputTicketFieldBlur = async (data) => {
+    if (!ticket) {
+      return await createTicketMutation({
+        body: data,
+      });
+    }
 
-  //   if (value !== "" && value !== ticket?.[name]) {
-  //     return await updateTicketMutation({
-  //       id: ticket._id,
-  //       body: {
-  //         [name]: value,
-  //       },
-  //     });
-  //   }
-  // };
+    return await updateTicketMutation({
+      id: ticket._id,
+      body: data,
+    });
+  };
 
-  // const ticketQuery = useQuery({
-  //   queryKey: ["ticket", { ticketId: ticket?._id }],
-  //   queryFn: async () =>
-  //     await ServicoTomadoTicketService.carregarTicket(ticket?._id),
-  //   staleTime: 1000 * 60 * 1, // 1 minute
-  //   enabled: open && !!defaultValue,
-  // });
+  const ticketQuery = useQuery({
+    queryKey: ["ticket", { ticketId: ticket?._id }],
+    queryFn: async () =>
+      await ServicoTomadoTicketService.carregarTicket(ticket?._id),
+    staleTime: 1000 * 60 * 1, // 1 minute
+    enabled: open && !!defaultValue,
+  });
 
   // const documentosCadastraisQuery = useQuery({
   //   queryKey: ["documentos-cadastrais", { pessoaId: ticket?.pessoa?._id }],
@@ -168,14 +162,18 @@ export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
           overflowY="auto"
           className="dialog-custom-scrollbar"
         >
-          <TicketForm ticket={ticket} onlyReading={false}  />
+          <TicketForm
+            ticket={ticket}
+            onSubmit={onInputTicketFieldBlur}
+            onlyReading={false}
+          />
           <FilesForm
             onlyReading={onlyReading}
             defaultValues={ticket?.arquivos}
             ticketId={ticket?._id}
           />
         </DialogBody>
-        {/* {defaultValue && (
+        {defaultValue && (
           <DialogFooter justifyContent="start">
             <TicketActions
               updateTicketMutation={updateTicketMutation}
@@ -183,7 +181,7 @@ export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
               etapa={ticket?.etapa}
             />
           </DialogFooter>
-        )} */}
+        )}
         <DialogCloseTrigger />
       </DialogContent>
     </DialogRoot>

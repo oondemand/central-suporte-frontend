@@ -7,14 +7,14 @@ import { useMemo } from "react";
 import { fields as makeFields } from "./fields";
 
 import { VisibilityControlDialog } from "../../../../components/vibilityControlDialog";
+import { flatFormFields } from "../../../../utils/form";
 
-export const TicketForm = ({ onlyReading, ticket }) => {
+export const TicketForm = ({ onlyReading, ticket, onSubmit }) => {
   const { inputsVisibility, setInputsVisibility } = useVisibleInputForm({
     key: "TICKET_MODAL_FORM",
   });
 
   const fields = useMemo(() => makeFields(), []);
-  const onSubmitPessoa = (data) => {};
 
   // useEffect(() => {}, [ticket]);
 
@@ -29,20 +29,6 @@ export const TicketForm = ({ onlyReading, ticket }) => {
           </Box>
         </GridItem>
         <GridItem colSpan={3} mt="6">
-          {/* {!onlyReading && (
-            <Box
-              mt="4"
-              w="full"
-              h="1"
-              borderBottom="2px solid"
-              borderColor="gray.100"
-            />
-          )} */}
-
-          {/* <Text fontSize="sm" color="gray.500" mt="6">
-            Detalhes
-          </Text> */}
-
           <Flex alignItems="center" gap="4" mb="6">
             <Box
               w="full"
@@ -51,7 +37,7 @@ export const TicketForm = ({ onlyReading, ticket }) => {
               borderColor="gray.100"
             />
             <VisibilityControlDialog
-              fields={fields}
+              fields={flatFormFields({ fields })}
               setVisibilityState={setInputsVisibility}
               visibilityState={inputsVisibility}
               title="Ocultar inputs"
@@ -63,7 +49,7 @@ export const TicketForm = ({ onlyReading, ticket }) => {
             data={ticket}
             // shouldUseFormValues={true}
             visibleState={inputsVisibility}
-            onSubmit={onSubmitPessoa}
+            onSubmit={onSubmit}
             gridColumns={2}
             gap={4}
           />
