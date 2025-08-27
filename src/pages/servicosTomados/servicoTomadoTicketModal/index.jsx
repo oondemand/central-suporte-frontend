@@ -12,32 +12,25 @@ import {
 import { queryClient } from "../../../config/react-query";
 
 import { Oondemand } from "../../../components/svg/oondemand";
-// import { PessoaForm } from "./form/pessoa";
 
 import { useMutation } from "@tanstack/react-query";
 import { ServicoTomadoTicketService } from "../../../service/servicoTomadoTicket";
 
 import { toaster } from "../../../components/ui/toaster";
 
-// import { TicketStatus } from "./ticketStatus";
 import { TicketActions } from "./ticketActions";
 import { FilesForm } from "./form/files";
-// import { ServicoForm } from "./form/servico";
-// import { InformacoesAdicionaisForm } from "./form/informacoes-adicionais";
-// import { DocumentoFiscalForm } from "./form/documentoFiscal";
 import { useIaChat } from "../../../hooks/useIaChat";
 import { useQuery } from "@tanstack/react-query";
-// import { DocumentosCadastraisService } from "../../../../service/documentos-cadastrais";
 import { ORIGENS } from "../../../constants/origens";
 import { useLoadAssistant } from "../../../hooks/api/assistant-config/useLoadAssistant";
 import { TicketForm } from "./form";
-// import { Tooltip } from "../../../../components/ui/tooltip";
-// import { Link } from "react-router-dom";
-// import { InvertedChart } from "../../../../components/svg/invertedChart";
+import { useAuth } from "../../../hooks/useAuth";
 
-export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
+export const TicketModal = ({ open, setOpen, defaultValue }) => {
   const [ticket, setTicket] = useState(defaultValue);
   const { onOpen } = useIaChat();
+  const { user } = useAuth;
 
   const { mutateAsync: createTicketMutation } = useMutation({
     mutationFn: async ({ body }) =>
@@ -93,21 +86,29 @@ export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
     enabled: open && !!defaultValue,
   });
 
-  // const documentosCadastraisQuery = useQuery({
-  //   queryKey: ["documentos-cadastrais", { pessoaId: ticket?.pessoa?._id }],
-  //   queryFn: async () =>
-  //     await DocumentosCadastraisService.listarPorPessoa({
-  //       pessoaId: ticket?.pessoa?._id,
-  //       dataRegistro: "",
-  //     }),
-  //   staleTime: 1000 * 60 * 1, // 1 minute
-  //   enabled: open && !!defaultValue,
-  // });
-
   const { assistant } = useLoadAssistant([
     `suporte.${ticket?.etapa}`,
     "suporte.geral",
   ]);
+
+  const verifiyOnlyReading = () => {
+    const usuarioResponsavel = Boolean(
+      ticket?.usuario_responsavel &&
+        user?._id &&
+        ticket.usuario_responsavel === user._id
+    );
+
+    const etapaRequisicao = ticket?.etapa === "requisicao";
+    const usuarioPadrao = !["amin", "agente"].includes(user?.tipo);
+
+    if (!defaultValue) return false;
+    if (usuarioResponsavel) return false;
+    if (usuarioPadrao && etapaRequisicao) return false;
+
+    return true;
+  };
+
+  const onlyReading = verifiyOnlyReading();
 
   return (
     <DialogRoot
@@ -165,7 +166,7 @@ export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
           <TicketForm
             ticket={ticket}
             onSubmit={onInputTicketFieldBlur}
-            onlyReading={false}
+            onlyReading={onlyReading}
           />
           <FilesForm
             onlyReading={onlyReading}
@@ -173,7 +174,7 @@ export const TicketModal = ({ open, setOpen, defaultValue, onlyReading }) => {
             ticketId={ticket?._id}
           />
         </DialogBody>
-        {defaultValue && (
+        {defaultValue && ["amin", "agente"].includes(user?.tipo) && (
           <DialogFooter justifyContent="start">
             <TicketActions
               updateTicketMutation={updateTicketMutation}

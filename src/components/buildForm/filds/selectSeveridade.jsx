@@ -53,8 +53,6 @@ export const SelectSeveridadeField = (props) => {
           name={props.field.name}
           control={props.methods.control}
           render={({ field }) => {
-            console.log(field?.value);
-
             return (
               <Select
                 onKeyDown={handleKeyDown}

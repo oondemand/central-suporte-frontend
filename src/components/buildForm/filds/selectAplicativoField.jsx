@@ -53,15 +53,15 @@ export const SelectAplicativoField = (props) => {
           name={props.field.name}
           control={props.methods.control}
           render={({ field }) => {
-            console.log(field?.value);
-
             return (
               <Select
                 onKeyDown={handleKeyDown}
                 fontSize="sm"
                 size="sm"
                 disabled={props?.disabled}
-                value={ options?.find((item) => item?.value == field?.value) ?? ""}
+                value={
+                  options?.find((item) => item?.value == field?.value) ?? ""
+                }
                 name={field.name}
                 onBlur={onBlur}
                 onChange={(e) => {

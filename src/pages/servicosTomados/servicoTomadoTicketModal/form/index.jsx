@@ -44,7 +44,7 @@ export const TicketForm = ({ onlyReading, ticket, onSubmit }) => {
             />
           </Flex>
           <BuildForm
-            // disabled={!ticket || onlyReading}
+            disabled={onlyReading}
             fields={fields}
             data={ticket}
             // shouldUseFormValues={true}
