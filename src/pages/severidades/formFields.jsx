@@ -6,6 +6,7 @@ import { currencyValidation, dateValidation } from "../../utils/zodHelpers";
 import { DateField } from "../../components/buildForm/filds/dateField";
 import { SelectPrestadorField } from "../../components/buildForm/filds/selectPrestadorField";
 import { SelectMoedaField } from "../../components/buildForm/filds/selectMoedaField";
+import { SwitchField } from "../../components/buildForm/filds/switchField";
 
 export const createDynamicFormFields = () => {
   return [
@@ -44,6 +45,13 @@ export const createDynamicFormFields = () => {
           label: "Tempo resolução (horas)",
           render: DefaultField,
           validation: z.coerce.string().nonempty("Campo obrigatório"),
+          colSpan: 1,
+        },
+        {
+          accessorKey: "apenas_dia_util",
+          label: "Apenas dias úteis",
+          render: SwitchField,
+          validation: z.boolean().optional(),
           colSpan: 1,
         },
       ],
