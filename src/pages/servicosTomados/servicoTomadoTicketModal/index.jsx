@@ -30,7 +30,7 @@ import { useAuth } from "../../../hooks/useAuth";
 export const TicketModal = ({ open, setOpen, defaultValue }) => {
   const [ticket, setTicket] = useState(defaultValue);
   const { onOpen } = useIaChat();
-  const { user } = useAuth;
+  const { user } = useAuth();
 
   const { mutateAsync: createTicketMutation } = useMutation({
     mutationFn: async ({ body }) =>
@@ -65,7 +65,7 @@ export const TicketModal = ({ open, setOpen, defaultValue }) => {
     },
   });
 
-  const onInputTicketFieldBlur = async (data) => {
+  const onSubmit = async (data) => {
     if (!ticket) {
       return await createTicketMutation({
         body: data,
@@ -92,16 +92,13 @@ export const TicketModal = ({ open, setOpen, defaultValue }) => {
   ]);
 
   const verifiyOnlyReading = () => {
-    const usuarioResponsavel = Boolean(
-      ticket?.usuario_responsavel &&
-        user?._id &&
-        ticket.usuario_responsavel === user._id
-    );
-
+    const usuarioResponsavel = ticket?.usuario_responsavel?._id === user?._id;
     const etapaRequisicao = ticket?.etapa === "requisicao";
-    const usuarioPadrao = !["amin", "agente"].includes(user?.tipo);
+    const userAdmin = user?.tipo === "admin";
+    const usuarioPadrao = user?.tipo === "padrao";
 
     if (!defaultValue) return false;
+    if (userAdmin) return false;
     if (usuarioResponsavel) return false;
     if (usuarioPadrao && etapaRequisicao) return false;
 
@@ -165,7 +162,7 @@ export const TicketModal = ({ open, setOpen, defaultValue }) => {
         >
           <TicketForm
             ticket={ticket}
-            onSubmit={onInputTicketFieldBlur}
+            onSubmit={onSubmit}
             onlyReading={onlyReading}
           />
           <FilesForm
@@ -174,10 +171,10 @@ export const TicketModal = ({ open, setOpen, defaultValue }) => {
             ticketId={ticket?._id}
           />
         </DialogBody>
-        {defaultValue && ["amin", "agente"].includes(user?.tipo) && (
+        {defaultValue && user?.tipo !== "padrao" && (
           <DialogFooter justifyContent="start">
             <TicketActions
-              updateTicketMutation={updateTicketMutation}
+              onUpdateTicket={updateTicketMutation}
               ticket={ticket}
               etapa={ticket?.etapa}
             />

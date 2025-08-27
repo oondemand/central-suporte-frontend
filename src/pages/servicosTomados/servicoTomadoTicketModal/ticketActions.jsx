@@ -3,19 +3,19 @@ import { Check, Trash, X } from "lucide-react";
 
 import { toaster } from "../../../components/ui/toaster";
 import { ServicoTomadoTicketService } from "../../../service/servicoTomadoTicket";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useConfirmation } from "../../../hooks/useConfirmation";
 import { queryClient } from "../../../config/react-query";
 import { ORIGENS } from "../../../constants/origens";
-// import { EtapaService } from "../../../service/etapa";
 import { useListEtapas } from "../../../hooks/api/etapas/useListEtapas";
-// import { Tooltip } from "../../../components/ui/tooltip";
 import { Link } from "react-router-dom";
-import { InvertedChart } from "../../../components/svg/invertedChart";
 
-export const TicketActions = ({ ticket, etapa }) => {
+import { useAuth } from "../../../hooks/useAuth";
+
+export const TicketActions = ({ ticket, etapa, onUpdateTicket }) => {
   const { setOpen } = useDialogContext();
   const { requestConfirmation } = useConfirmation();
+  const { user } = useAuth();
 
   const { etapas } = useListEtapas();
 
@@ -95,78 +95,85 @@ export const TicketActions = ({ ticket, etapa }) => {
   };
 
   const primeiraEtapa = etapas[0]?.codigo;
+  const usuarioResponsavel =
+    ticket?.usuario_responsavel &&
+    ticket?.usuario_responsavel?._id === user?._id;
 
-  const urlMap = {
-    "conta-pagar-central-omie": `/integracao/conta-pagar/central-omie?searchTerm=${ticket?.contaPagarOmie?._id}`,
-    "conta-pagar-omie-central": `/integracao/conta-pagar/omie-central?searchTerm=${ticket?.contaPagarOmie?._id}`,
+  const userAdmin = user?.tipo === "admin";
+
+  const aoAtribuirUsuario = async () => {
+    return await onUpdateTicket({
+      id: ticket._id,
+      body: { usuario_responsavel: user },
+    });
   };
 
   return (
     <Flex alignItems="center" w="full" justifyContent="space-between">
       <Flex gap="2">
-        {![
-          "conta-pagar-central-omie",
-          "conta-pagar-omie-central",
-          "concluido",
-        ].includes(etapa) && (
+        {!["concluido"].includes(etapa) &&
+          (usuarioResponsavel || userAdmin) && (
+            <>
+              <Button
+                onClick={async (e) => {
+                  await aproveTicketMutation();
+                  setOpen(false);
+                }}
+                disabled={isAprovePending}
+                variant="surface"
+                shadow="xs"
+                colorPalette="green"
+                size="xs"
+              >
+                <Check /> Aprovar
+              </Button>
+
+              <Button
+                disabled={etapa === primeiraEtapa || isReprovePending}
+                onClick={async (e) => {
+                  await reproveTicketMutation();
+                  setOpen(false);
+                }}
+                colorPalette="red"
+                variant="surface"
+                shadow="xs"
+                size="xs"
+              >
+                <X /> Reprovar
+              </Button>
+            </>
+          )}
+
+        {(usuarioResponsavel || userAdmin) && (
           <Button
+            disabled={isArquivePending}
             onClick={async (e) => {
-              await aproveTicketMutation();
+              await handleArquiveTicket();
               setOpen(false);
             }}
-            disabled={isAprovePending}
-            variant="surface"
-            shadow="xs"
-            colorPalette="green"
-            size="xs"
-          >
-            <Check /> Aprovar
-          </Button>
-        )}
-        {![
-          "conta-pagar-central-omie",
-          "conta-pagar-omie-central",
-          "concluido",
-        ].includes(etapa) && (
-          <Button
-            disabled={etapa === primeiraEtapa || isReprovePending}
-            onClick={async (e) => {
-              await reproveTicketMutation();
-              setOpen(false);
-            }}
-            colorPalette="red"
             variant="surface"
             shadow="xs"
             size="xs"
           >
-            <X /> Reprovar
+            <Trash /> Arquivar
           </Button>
         )}
-        {["conta-pagar-central-omie", "conta-pagar-omie-central"].includes(
-          etapa
-        ) && (
-          <Link to={urlMap[etapa]} viewTransition>
-            <Button size="xs" shadow="xs" variant="surface" display="flex">
-              <Text p="1" rounded="full" color="brand.500" cursor="pointer">
-                <InvertedChart />
-              </Text>
-              <Text>Integração</Text>
+
+        {!ticket?.usuario_responsavel && (
+          <Link viewTransition>
+            <Button
+              onClick={aoAtribuirUsuario}
+              size="xs"
+              variant="ghost"
+              color="brand.500"
+              display="flex"
+            >
+              <Text>Atribuir a mim</Text>
             </Button>
           </Link>
         )}
-        <Button
-          disabled={isArquivePending}
-          onClick={async (e) => {
-            await handleArquiveTicket();
-            setOpen(false);
-          }}
-          variant="surface"
-          shadow="xs"
-          size="xs"
-        >
-          <Trash /> Arquivar
-        </Button>
       </Flex>
+
       <Button
         onClick={(e) => {
           setOpen(false);
