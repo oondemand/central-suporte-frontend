@@ -1,4 +1,12 @@
-import { Box, Button, Flex, IconButton, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  IconButton,
+  Image,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Paperclip, CircleX, Trash } from "lucide-react";
@@ -106,25 +114,41 @@ export const ComentariosSession = ({
               </Text>
 
               <Box mt="2">
-                {comentario?.arquivos?.map((item) => (
-                  <Flex mt="4" key={item?._id} gap="2" alignItems="center">
-                    <Button
-                      size="2xs"
-                      variant="ghost"
-                      fontSize="sm"
-                      color="gray.500"
-                      fontWeight="normal"
-                      display="flex"
-                      gap="1.5"
-                      alignItems="center"
-                      px="0.5"
-                      onClick={() => handleDownloadFile({ id: item?._id })}
-                    >
-                      <Paperclip color="purple" size={14} />
-                      {item?.nomeOriginal} {(item?.size / 1024).toFixed(1)} KB
-                    </Button>
-                  </Flex>
-                ))}
+                {comentario?.arquivos?.map((item) => {
+                  const byteArray = new Uint8Array(item?.buffer?.data || []);
+                  const blob = new Blob([byteArray], { type: item?.mimetype });
+                  const objectUrl = URL.createObjectURL(blob);
+
+                  return (
+                    <Box mt="4" key={item?._id}>
+                      <Button
+                        size="2xs"
+                        variant="ghost"
+                        fontSize="sm"
+                        color="gray.500"
+                        fontWeight="normal"
+                        display="flex"
+                        gap="1.5"
+                        alignItems="center"
+                        px="0.5"
+                        onClick={() => handleDownloadFile({ id: item?._id })}
+                      >
+                        <Paperclip color="purple" size={14} />
+                        {item?.nomeOriginal} {(item?.size / 1024).toFixed(1)} KB
+                      </Button>
+
+                      {item?.mimetype?.startsWith("image/") && (
+                        <Image
+                          src={objectUrl}
+                          alt={item?.nomeOriginal}
+                          maxH="300px"
+                          objectFit="contain"
+                          rounded="md"
+                        />
+                      )}
+                    </Box>
+                  );
+                })}
               </Box>
             </Box>
           ))}
