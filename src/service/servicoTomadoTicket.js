@@ -182,6 +182,19 @@ const comentario = async ({ ticketId, files, mensagem }) => {
   );
 };
 
+const removerComentario = async ({ ticketId, comentarioId, origem }) => {
+  const { data } = await api.post(
+    `/servicos-tomados/tickets/${ticketId}/remover-comentario/${comentarioId}`,
+    {},
+    {
+      headers: {
+        "x-origem": origem,
+      },
+    }
+  );
+  return data;
+};
+
 export const ServicoTomadoTicketService = {
   listarTickets,
   adicionarTicket,
@@ -200,4 +213,5 @@ export const ServicoTomadoTicketService = {
   removerDocumentoFiscal,
   carregarTicket,
   comentario,
+  removerComentario,
 };

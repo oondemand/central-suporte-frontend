@@ -1,4 +1,13 @@
-import { Box, Flex, Heading, Textarea, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Textarea,
+  Input,
+  Text,
+  GridItem,
+  Grid,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 
 import {
@@ -85,6 +94,29 @@ export const TicketModal = ({ open, setOpen, defaultValue }) => {
     onError: () => {
       toaster.create({
         title: "Ouve um erro ao adicionar comentário!",
+        type: "error",
+      });
+    },
+  });
+
+  const { mutateAsync: onRemoveComentario } = useMutation({
+    mutationFn: async ({ id }) =>
+      await ServicoTomadoTicketService.removerComentario({
+        comentarioId: id,
+        ticketId: ticket?._id,
+      }),
+    onSuccess: (data) => {
+      toaster.create({
+        title: "Comentário removido!",
+        type: "success",
+      });
+
+      queryClient.invalidateQueries(["ticket", { ticketId: ticket?._id }]);
+    },
+
+    onError: () => {
+      toaster.create({
+        title: "Ouve um erro ao remover comentário!",
         type: "error",
       });
     },
@@ -190,19 +222,38 @@ export const TicketModal = ({ open, setOpen, defaultValue }) => {
             onSubmit={onSubmit}
             onlyReading={onlyReading}
           />
-          <ComentariosSession
-            comentarios={ticketQuery.data?.ticket?.comentarios}
-            onAddComentario={async (values) => {
-              await handleAddComentario({
-                files: values.arquivos ?? [],
-                mensagem: values.message,
-              });
-            }}
-            containerStyle={{
-              ml: "60",
-              mt: "8",
-            }}
-          />
+          <Grid templateColumns="repeat(4, 1fr)" gap="4">
+            <GridItem colSpan={1} mt="6">
+              <Box w="100px">
+                <Text color="gray.600" fontSize="sm">
+                  Comentários
+                </Text>
+              </Box>
+            </GridItem>
+            <GridItem colSpan={3} mt="6">
+              <Box
+                w="full"
+                h="1"
+                borderBottom="2px solid"
+                borderColor="gray.100"
+              />
+              <ComentariosSession
+                comentarios={ticketQuery.data?.ticket?.comentarios}
+                onAddComentario={async (values) => {
+                  await handleAddComentario({
+                    files: values.arquivos ?? [],
+                    mensagem: values.message,
+                  });
+                }}
+                onRemoveComentario={async (values) => {
+                  await onRemoveComentario({
+                    id: values.id,
+                  });
+                }}
+                containerStyle={{ mt: "8" }}
+              />
+            </GridItem>
+          </Grid>
           <FilesForm
             onlyReading={onlyReading}
             defaultValues={ticket?.arquivos}
