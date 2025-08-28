@@ -167,6 +167,21 @@ const listarTicketsPagos = async ({ filters }) => {
   return data;
 };
 
+const comentario = async ({ ticketId, files, mensagem }) => {
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append("arquivos", file);
+  }
+
+  formData.append("mensagem", mensagem);
+
+  return await api.post(
+    `/servicos-tomados/tickets/${ticketId}/comentario`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } }
+  );
+};
+
 export const ServicoTomadoTicketService = {
   listarTickets,
   adicionarTicket,
@@ -184,4 +199,5 @@ export const ServicoTomadoTicketService = {
   adicionarDocumentoFiscal,
   removerDocumentoFiscal,
   carregarTicket,
+  comentario,
 };

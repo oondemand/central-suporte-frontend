@@ -26,6 +26,7 @@ import { ORIGENS } from "../../../constants/origens";
 import { useLoadAssistant } from "../../../hooks/api/assistant-config/useLoadAssistant";
 import { TicketForm } from "./form";
 import { useAuth } from "../../../hooks/useAuth";
+import { ComentariosSession } from "../../../components/comentarios";
 
 export const TicketModal = ({ open, setOpen, defaultValue }) => {
   const [ticket, setTicket] = useState(defaultValue);
@@ -62,6 +63,30 @@ export const TicketModal = ({ open, setOpen, defaultValue }) => {
       });
 
       setTicket(data?.ticket);
+    },
+  });
+
+  const { mutateAsync: handleAddComentario } = useMutation({
+    mutationFn: async ({ files, mensagem }) =>
+      await ServicoTomadoTicketService.comentario({
+        files,
+        mensagem,
+        ticketId: ticket?._id,
+      }),
+    onSuccess: (data) => {
+      toaster.create({
+        title: "Comentário adicionado!",
+        type: "success",
+      });
+
+      queryClient.invalidateQueries(["ticket", { ticketId: ticket?._id }]);
+    },
+
+    onError: () => {
+      toaster.create({
+        title: "Ouve um erro ao adicionar comentário!",
+        type: "error",
+      });
     },
   });
 
@@ -164,6 +189,19 @@ export const TicketModal = ({ open, setOpen, defaultValue }) => {
             ticket={ticket}
             onSubmit={onSubmit}
             onlyReading={onlyReading}
+          />
+          <ComentariosSession
+            comentarios={ticketQuery.data?.ticket?.comentarios}
+            onAddComentario={async (values) => {
+              await handleAddComentario({
+                files: values.arquivos ?? [],
+                mensagem: values.message,
+              });
+            }}
+            containerStyle={{
+              ml: "60",
+              mt: "8",
+            }}
           />
           <FilesForm
             onlyReading={onlyReading}
