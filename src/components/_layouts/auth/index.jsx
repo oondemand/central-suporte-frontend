@@ -54,7 +54,7 @@ export const AuthLayout = () => {
   };
 
   if (!user && isLoading === false) {
-    window.location.href = `${env.VITE_MEUS_APPS_URL}/login`;
+    // window.location.href = `${env.VITE_MEUS_APPS_URL}/login`;
     return;
   }
 
