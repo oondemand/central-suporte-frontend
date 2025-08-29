@@ -12,16 +12,18 @@ import {
   HelpCircle,
   MessageCircle,
   LifeBuoy,
+  ChartNoAxesColumnIncreasingIcon,
 } from "lucide-react";
 import { Chart } from "../../svg/chart";
 import { InvertedChart } from "../../svg/invertedChart";
+import { Box } from "@chakra-ui/react";
 
 export const menuItems = [
-  {
-    title: "Dashboard",
-    icon: Chart,
-    href: "/",
-  },
+  // {
+  //   title: "Dashboard",
+  //   icon: Chart,
+  //   href: "/",
+  // },
   // {
   //   title: "Planejamento",
   //   href: "/planejamento",
@@ -29,8 +31,8 @@ export const menuItems = [
   // },
   {
     title: "Esteira de suporte",
-    icon: InvertedChart,
-    href: "/servicos-tomados",
+    icon: Chart,
+    href: "/",
   },
   // {
   //   title: "Clientes e prestadores",

@@ -54,11 +54,9 @@ export const AuthLayout = () => {
   };
 
   if (!user && isLoading === false) {
-    // window.location.href = `${env.VITE_MEUS_APPS_URL}/login`;
+    window.location.href = `${env.VITE_MEUS_APPS_URL}/login`;
     return;
   }
-
-  console.log("USER", user);
 
   return (
     <Flex direction="row" minHeight="100vh" minW="100vw">
@@ -86,12 +84,12 @@ export const AuthLayout = () => {
           borderColor="gray.50"
         >
           <Link to="/" viewTransition>
-            <Box w="120px">
-              {/* <img src="/logo_rakuten_purple.png" alt="RAKUTEN" /> */}
-              <Text fontSize="lg" fontWeight="700">
-                Assistentes
+            <Flex flexDir="column" alignItems="center" gap="1">
+              <img src="/logo_vertical.png" alt="logo" />
+              <Text fontSize="xs" fontWeight="medium" mt="-2">
+                Central suporte
               </Text>
-            </Box>
+            </Flex>
           </Link>
         </Flex>
         {menuItems.map((item, index) => {

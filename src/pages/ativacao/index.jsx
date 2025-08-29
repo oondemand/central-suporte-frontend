@@ -72,7 +72,6 @@ export const Ativacao = () => {
       });
 
       window.location.href = `${env.VITE_MEUS_APPS_URL}/login`;
-      // navigate("/login", { viewTransition: true });
     },
   });
 
@@ -97,7 +96,7 @@ export const Ativacao = () => {
           borderLeft="2px solid"
           borderColor="cyan.500"
         >
-          <Heading>Oondemand</Heading>
+          <Heading>Central suporte</Heading>
           <Text>Formulário de ativação</Text>
 
           {/* <Box mt="6">
